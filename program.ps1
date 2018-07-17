@@ -3,6 +3,16 @@
 # Define Variables
 $ScriptPath = $MyInvocation.MyCommand.Path
 $ScriptName = $MyInvocation.MyCommand.Name
+$PcName = $env:computername
+$internet = (Test-Connection -computer google.com -count 1 -quiet) | Out-String
+$arch=(Get-CimInStance Win32_OperatingSystem).Osarchitecture
+$major=[Environment]::OSVersion.Version.Major
+$minor=[Environment]::OSVersion.Version.Minor
+if ("$major.$minor" -eq "10.0"){$os='win10'}
+if ("$major.$minor" -eq "6.3"){$os='win81'}
+if ("$major.$minor" -eq "6.2"){$os='win81'}
+if ("$major.$minor" -eq "6.1"){$os='win7'}
+
 
 # Elevate Script
 if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { Start-Process powershell.exe "-NoProfile -ExecutionPolicy Unrestricted -File `"$ScriptPath`"" -Verb RunAs; exit }
